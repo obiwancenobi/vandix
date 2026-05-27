@@ -110,10 +110,10 @@ cd backend && docker compose up -d db redis
 source .venv/bin/activate && uvicorn app.main:app --reload --port 8000
 
 # Flutter (dev)
-cd mobile && flutter run --flavor dev --target lib/main_dev.dart
+cd mobile && flutter run --flavor dev
 
 # Flutter (prod)
-cd mobile && flutter run --flavor prod --target lib/main_prod.dart
+cd mobile && flutter run --flavor prod
 
 # Codegen
 cd mobile && dart run build_runner build --delete-conflicting-outputs
@@ -131,9 +131,7 @@ cd backend && source .venv/bin/activate && alembic upgrade head
 | `backend/app/services/ai_generator.py` | OCR + PDF extraction + AI generation |
 | `backend/.env` | Local config (gitignored) |
 | `mobile/lib/config/app_config.dart` | Flavor-based settings (API URL, app name) |
-| `mobile/lib/app.dart` | Shared bootstrap + VandixApp widget |
-| `mobile/lib/main_dev.dart` | Dev entry point |
-| `mobile/lib/main_prod.dart` | Prod entry point |
+| `mobile/lib/main.dart` | Entry point — reads FLAVOR from dart-define |
 | `mobile/lib/router/app_router.dart` | GoRouter with auth redirects |
 | `mobile/lib/features/auth/presentation/auth_provider.dart` | Auth state (Riverpod) |
 | `mobile/lib/shared/utils/api_client.dart` | Dio client with token refresh |

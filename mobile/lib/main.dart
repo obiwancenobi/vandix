@@ -6,9 +6,12 @@ import 'config/app_config.dart';
 import 'shared/theme/app_theme.dart';
 import 'router/app_router.dart';
 
-void bootstrap(AppConfig config) async {
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await EasyLocalization.ensureInitialized();
+
+  const flavor = String.fromEnvironment('FLAVOR', defaultValue: 'dev');
+  final config = AppConfig.fromFlavor(flavor);
 
   AppConfig.instance = config;
 

@@ -15,6 +15,15 @@ class AppConfig {
 
   static late AppConfig instance;
 
+  factory AppConfig.fromFlavor(String flavor) {
+    switch (flavor) {
+      case 'prod':
+        return prod();
+      default:
+        return dev();
+    }
+  }
+
   static AppConfig dev() => const AppConfig._(
         flavor: Flavor.dev,
         appName: 'Vandix Dev',

@@ -109,34 +109,41 @@ flutter pub get
 # Run code generation (freezed models)
 dart run build_runner build --delete-conflicting-outputs
 
-# Run in development flavor (localhost:8000)
-flutter run --flavor dev --target lib/main_dev.dart
+# Run in development flavor
+flutter run --flavor dev
 
-# Run in production flavor (api.vandix.app)
-flutter run --flavor prod --target lib/main_prod.dart
+# Run in production flavor
+flutter run --flavor prod
+```
+
+> **CLI note:** From terminal, add `--dart-define FLAVOR=dev` (or `prod`) so the app knows which flavor to use. VS Code and Android Studio configs handle this automatically.
+
+```bash
+# Full CLI command
+flutter run --flavor dev --dart-define FLAVOR=dev
 ```
 
 **Flavor shortcuts:**
 
 | Flavor | Command | API Endpoint | App Name | Bundle ID |
 |---|---|---|---|---|
-| dev | `flutter run --flavor dev --target lib/main_dev.dart` | `http://localhost:8000` | Vandix Dev | `com.beetlix.vandix.dev` |
-| prod | `flutter run --flavor prod --target lib/main_prod.dart` | `https://api.vandix.app` | Vandix | `com.beetlix.vandix` |
+| dev | `flutter run --flavor dev` | `http://10.0.2.2:8000` | Vandix Dev | `com.beetlix.vandix.dev` |
+| prod | `flutter run --flavor prod` | `https://api.vandix.app` | Vandix | `com.beetlix.vandix` |
 
 **Platform-specific:**
 
 ```bash
 # iOS Simulator (dev)
-flutter run --flavor dev --target lib/main_dev.dart -d iPhone
+flutter run --flavor dev -d iPhone
 
 # Android Emulator (dev)
-flutter run --flavor dev --target lib/main_dev.dart -d android
+flutter run --flavor dev -d android
 
 # Build APK (production)
-flutter build apk --flavor prod --target lib/main_prod.dart
+flutter build apk --flavor prod
 
 # Build iOS (production)
-flutter build ios --flavor prod --target lib/main_prod.dart
+flutter build ios --flavor prod
 ```
 
 **API base URL per flavor** is configured in `lib/config/app_config.dart`. To point dev at a different backend (e.g. physical device on LAN):
@@ -342,25 +349,17 @@ flutter pub get
 dart run build_runner build --delete-conflicting-outputs
 
 # Run dev flavor on iOS Simulator
-flutter run --flavor dev --target lib/main_dev.dart -d iPhone
+flutter run --flavor dev -d iPhone
 
 # Run dev flavor on Android Emulator
-flutter run --flavor dev --target lib/main_dev.dart -d android
+flutter run --flavor dev -d android
 ```
 
-The dev flavor connects to `http://localhost:8000` by default.
+The dev flavor connects to `http://10.0.2.2:8000` by default (Android emulator).
 
-**Android Emulator** can't reach `localhost` — update the dev API URL in `lib/config/app_config.dart`:
-```dart
-static AppConfig dev() => const AppConfig._(
-      // ...
-      apiBaseUrl: 'http://10.0.2.2:8000',  // Android emulator host
-    );
-```
+**iOS Simulator** — change `apiBaseUrl` to `http://localhost:8000` in `lib/config/app_config.dart`.
 
-**iOS Simulator** — `localhost` works as-is.
-
-**Physical device** — use your machine's LAN IP:
+**Physical device** — change to your machine's LAN IP:
 ```dart
 apiBaseUrl: 'http://192.168.x.x:8000',
 ```
@@ -372,7 +371,7 @@ apiBaseUrl: 'http://192.168.x.x:8000',
 cd backend && source .venv/bin/activate && uvicorn app.main:app --reload --port 8000
 
 # Terminal 2: Flutter (dev flavor)
-cd mobile && flutter run --flavor dev --target lib/main_dev.dart
+cd mobile && flutter run --flavor dev
 
 # In the app:
 # 1. Sign up → get 5 free credits
