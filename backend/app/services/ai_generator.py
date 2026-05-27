@@ -5,8 +5,12 @@ from app.core.config import get_settings
 settings = get_settings()
 
 
+def _vision_model() -> str:
+    return settings.openai_vision_model or settings.openai_model
+
+
 async def extract_text_from_image(file_path: str) -> str:
-    """Extract text from image using OpenAI vision API."""
+    """Extract text from image using vision API."""
     import base64
     from pathlib import Path
 
@@ -21,7 +25,7 @@ async def extract_text_from_image(file_path: str) -> str:
             f"{settings.openai_base_url}/chat/completions",
             headers={"Authorization": f"Bearer {settings.openai_api_key}"},
             json={
-                "model": settings.openai_model,
+                "model": _vision_model(),
                 "messages": [
                     {
                         "role": "user",

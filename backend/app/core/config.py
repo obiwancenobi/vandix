@@ -17,6 +17,7 @@ class Settings(BaseSettings):
     openai_api_key: str = ""
     openai_base_url: str = "https://api.openai.com/v1"
     openai_model: str = "gpt-4o"
+    openai_vision_model: str = ""  # falls back to openai_model if empty
 
     redis_url: str = "redis://localhost:6379"
     upload_dir: str = "./uploads"
