@@ -18,6 +18,10 @@ android {
         jvmTarget = JavaVersion.VERSION_11.toString()
     }
 
+    buildFeatures {
+        buildConfig = true
+    }
+
     defaultConfig {
         applicationId = "com.beetlix.vandix"
         minSdk = flutter.minSdkVersion
