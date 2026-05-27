@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:easy_localization/easy_localization.dart';
 
@@ -10,9 +11,13 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await EasyLocalization.ensureInitialized();
 
-  const flavor = String.fromEnvironment('FLAVOR', defaultValue: 'dev');
-  final config = AppConfig.fromFlavor(flavor);
+  String flavor = 'dev';
+  try {
+    flavor = await const MethodChannel('com.beetlix.vandix/flavor')
+        .invokeMethod<String>('getFlavor') ?? 'dev';
+  } catch (_) {}
 
+  final config = AppConfig.fromFlavor(flavor);
   AppConfig.instance = config;
 
   runApp(

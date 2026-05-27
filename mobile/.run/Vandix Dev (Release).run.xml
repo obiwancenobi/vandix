@@ -1,6 +1,6 @@
 <component name="ProjectRunConfigurationManager">
   <configuration default="false" name="Vandix Dev (Release)" type="FlutterRunConfigurationType" factoryName="Flutter">
-    <option name="additionalArgs" value="--flavor dev --dart-define FLAVOR=dev --release" />
+    <option name="additionalArgs" value="--flavor dev --release" />
     <option name="filePath" value="$PROJECT_DIR$/lib/main.dart" />
     <method v="2" />
   </configuration>

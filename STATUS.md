@@ -131,7 +131,7 @@ cd backend && source .venv/bin/activate && alembic upgrade head
 | `backend/app/services/ai_generator.py` | OCR + PDF extraction + AI generation |
 | `backend/.env` | Local config (gitignored) |
 | `mobile/lib/config/app_config.dart` | Flavor-based settings (API URL, app name) |
-| `mobile/lib/main.dart` | Entry point — reads FLAVOR from dart-define |
+| `mobile/lib/main.dart` | Entry point — reads flavor from native platform channel |
 | `mobile/lib/router/app_router.dart` | GoRouter with auth redirects |
 | `mobile/lib/features/auth/presentation/auth_provider.dart` | Auth state (Riverpod) |
 | `mobile/lib/shared/utils/api_client.dart` | Dio client with token refresh |

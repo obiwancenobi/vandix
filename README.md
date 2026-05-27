@@ -116,11 +116,13 @@ flutter run --flavor dev
 flutter run --flavor prod
 ```
 
-> **CLI note:** From terminal, add `--dart-define FLAVOR=dev` (or `prod`) so the app knows which flavor to use. VS Code and Android Studio configs handle this automatically.
+> **How it works:** `--flavor` sets the Android build variant / iOS scheme. The native side exposes the flavor name to Dart via a platform channel — no `--dart-define` needed.
 
 ```bash
-# Full CLI command
-flutter run --flavor dev --dart-define FLAVOR=dev
+# Examples
+flutter run --flavor dev -d android
+flutter run --flavor dev -d iPhone
+flutter run --flavor prod
 ```
 
 **Flavor shortcuts:**
