@@ -182,6 +182,217 @@ This starts: PostgreSQL (5433), Redis (6379), API (8000), ARQ worker.
 6. Child accesses published activities
 ```
 
+## Testing Locally
+
+### 1. Start the backend
+
+```bash
+cd backend
+
+# Start PostgreSQL + Redis
+docker compose up -d db redis
+
+# Activate venv
+source .venv/bin/activate
+
+# Run migrations (if not done yet)
+alembic upgrade head
+
+# Start API with hot reload
+uvicorn app.main:app --reload --port 8000
+```
+
+API is now at `http://localhost:8000`. Swagger docs at `http://localhost:8000/docs`.
+
+### 2. Test the API with curl
+
+**Register a user:**
+```bash
+curl -s http://localhost:8000/api/auth/register \
+  -H "Content-Type: application/json" \
+  -d '{"name":"Test User","email":"test@test.com","password":"password123"}' | python3 -m json.tool
+```
+
+Response:
+```json
+{
+  "access_token": "eyJ...",
+  "refresh_token": "eyJ...",
+  "token_type": "bearer"
+}
+```
+
+**Save the token for next requests:**
+```bash
+TOKEN="paste-access-token-here"
+```
+
+**Get current user:**
+```bash
+curl -s http://localhost:8000/api/auth/me \
+  -H "Authorization: Bearer $TOKEN" | python3 -m json.tool
+```
+
+**Upload a material (image):**
+```bash
+curl -s http://localhost:8000/api/materials \
+  -H "Authorization: Bearer $TOKEN" \
+  -F "file=@/path/to/notes.jpg" \
+  -F "title=Biology Chapter 3" \
+  -F "file_type=image" \
+  -F "grade_level=SMP Kelas 8" | python3 -m json.tool
+```
+
+**Upload a material (PDF):**
+```bash
+curl -s http://localhost:8000/api/materials \
+  -H "Authorization: Bearer $TOKEN" \
+  -F "file=@/path/to/textbook.pdf" \
+  -F "title=Math Chapter 5" \
+  -F "file_type=pdf" \
+  -F "grade_level=SMA Kelas 10" | python3 -m json.tool
+```
+
+**List materials:**
+```bash
+curl -s http://localhost:8000/api/materials \
+  -H "Authorization: Bearer $TOKEN" | python3 -m json.tool
+```
+
+**Generate activities from a material:**
+```bash
+MATERIAL_ID="paste-material-id-here"
+
+curl -s http://localhost:8000/api/topics \
+  -H "Authorization: Bearer $TOKEN" \
+  -H "Content-Type: application/json" \
+  -d "{\"material_id\":\"$MATERIAL_ID\",\"types\":[\"flashcard\",\"quiz\",\"matching\"]}" | python3 -m json.tool
+```
+
+**List topics:**
+```bash
+curl -s http://localhost:8000/api/topics \
+  -H "Authorization: Bearer $TOKEN" | python3 -m json.tool
+```
+
+**Get topic with activities:**
+```bash
+TOPIC_ID="paste-topic-id-here"
+
+curl -s http://localhost:8000/api/topics/$TOPIC_ID \
+  -H "Authorization: Bearer $TOKEN" | python3 -m json.tool
+```
+
+**Publish a topic (parent review → live):**
+```bash
+curl -s -X PATCH http://localhost:8000/api/topics/$TOPIC_ID/publish \
+  -H "Authorization: Bearer $TOKEN" | python3 -m json.tool
+```
+
+**Access shared topic (no auth needed):**
+```bash
+SHARE_CODE="paste-share-code-here"
+
+curl -s http://localhost:8000/api/topics/share/$SHARE_CODE | python3 -m json.tool
+```
+
+### 3. Test with Flutter
+
+```bash
+cd mobile
+
+# Install deps + codegen
+flutter pub get
+dart run build_runner build --delete-conflicting-outputs
+
+# Run on iOS Simulator
+flutter run -d iPhone
+
+# Run on Android Emulator
+flutter run -d android
+
+# Run on Chrome (web)
+flutter run -d chrome
+```
+
+The Flutter app connects to `http://localhost:8000` by default (set in `lib/shared/utils/api_client.dart`).
+
+**For Android Emulator**, the host machine is at `10.0.2.2` instead of `localhost`:
+```dart
+// In lib/shared/utils/api_client.dart
+static const _baseUrl = 'http://10.0.2.2:8000';
+```
+
+**For iOS Simulator**, `localhost` works as-is.
+
+**For physical device**, use your machine's local IP:
+```dart
+static const _baseUrl = 'http://192.168.x.x:8000';
+```
+
+### 4. Full flow test
+
+```bash
+# Terminal 1: Backend
+cd backend && source .venv/bin/activate && uvicorn app.main:app --reload --port 8000
+
+# Terminal 2: Flutter
+cd mobile && flutter run
+
+# In the app:
+# 1. Sign up → get 5 free credits
+# 2. Upload a photo of school notes
+# 3. Generate activities (flashcard + quiz)
+# 4. Review generated activities
+# 5. Publish → share link
+```
+
+### 5. Using the full Docker stack
+
+```bash
+cd backend
+
+# Copy and edit env
+cp .env.example .env
+# Set your OPENAI_API_KEY in .env
+
+# Build and start everything
+docker compose up --build
+
+# API at http://localhost:8000
+# PostgreSQL at localhost:5433
+# Redis at localhost:6379
+```
+
+### 6. Troubleshooting
+
+**Port 5432 already in use:**
+The docker-compose.yml uses port 5433 to avoid conflicts. Update `.env` if needed.
+
+**Migration errors:**
+```bash
+cd backend
+source .venv/bin/activate
+alembic upgrade head
+alembic current    # check current version
+alembic history    # see all migrations
+```
+
+**Flutter codegen errors:**
+```bash
+cd mobile
+dart run build_runner clean
+dart run build_runner build --delete-conflicting-outputs
+```
+
+**Backend import errors:**
+```bash
+cd backend
+source .venv/bin/activate
+pip install -r requirements.txt
+python -c "from app.main import app; print('OK')"
+```
+
 ## Bundle ID
 
 `com.beetlix.vandix`
