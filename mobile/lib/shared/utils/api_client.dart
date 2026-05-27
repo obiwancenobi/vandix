@@ -1,15 +1,19 @@
 import 'package:dio/dio.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
+import '../../config/app_config.dart';
+
 class ApiClient {
-  static const _baseUrl = 'http://localhost:8000';
   static const _accessTokenKey = 'access_token';
   static const _refreshTokenKey = 'refresh_token';
 
   late final Dio _dio;
+  late final String _baseUrl;
   final _storage = const FlutterSecureStorage();
 
   ApiClient() {
+    _baseUrl = AppConfig.instance.apiBaseUrl;
+
     _dio = Dio(BaseOptions(
       baseUrl: _baseUrl,
       connectTimeout: const Duration(seconds: 30),
