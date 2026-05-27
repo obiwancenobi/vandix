@@ -18,7 +18,7 @@ class AppConfig {
   static AppConfig dev() => const AppConfig._(
         flavor: Flavor.dev,
         appName: 'Vandix Dev',
-        apiBaseUrl: 'http://localhost:8000',
+        apiBaseUrl: 'http://10.0.2.2:8000',
         showDebugBanner: true,
       );
 

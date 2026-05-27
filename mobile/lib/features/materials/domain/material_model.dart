@@ -5,6 +5,7 @@ part 'material_model.g.dart';
 
 @freezed
 class MaterialModel with _$MaterialModel {
+  @JsonSerializable(fieldRename: FieldRename.snake)
   const factory MaterialModel({
     required String id,
     required String title,

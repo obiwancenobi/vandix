@@ -220,7 +220,8 @@ class __$$MaterialModelImplCopyWithImpl<$Res>
 }
 
 /// @nodoc
-@JsonSerializable()
+
+@JsonSerializable(fieldRename: FieldRename.snake)
 class _$MaterialModelImpl implements _MaterialModel {
   const _$MaterialModelImpl({
     required this.id,
