@@ -1,0 +1,38 @@
+{
+  "app_name": "LearnLoop",
+  "auth": {
+    "login": "Masuk",
+    "signup": "Buat Akun",
+    "email": "Email",
+    "password": "Kata Sandi",
+    "name": "Nama kamu",
+    "forgot_password": "Lupa kata sandi?",
+    "no_account": "Belum punya akun?",
+    "has_account": "Sudah punya akun?",
+    "continue_google": "Lanjut dengan Google",
+    "or": "atau",
+    "signup_subtitle": "Gratis 5 kredit untuk mulai",
+    "login_subtitle": "Selamat datang kembali",
+    "logout": "Keluar"
+  },
+  "home": {
+    "greeting": "Halo, {name}!",
+    "credits": "Kredit",
+    "recent_topics": "Topik Terbaru",
+    "no_topics": "Belum ada topik",
+    "create_first": "Upload materi pertama untuk memulai",
+    "upload_material": "Upload Materi"
+  },
+  "common": {
+    "loading": "Memuat...",
+    "error": "Terjadi kesalahan",
+    "retry": "Coba lagi",
+    "cancel": "Batal",
+    "save": "Simpan",
+    "delete": "Hapus",
+    "edit": "Ubah",
+    "done": "Selesai",
+    "next": "Lanjut",
+    "back": "Kembali"
+  }
+}

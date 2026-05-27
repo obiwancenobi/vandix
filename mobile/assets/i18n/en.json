@@ -1,0 +1,38 @@
+{
+  "app_name": "LearnLoop",
+  "auth": {
+    "login": "Sign In",
+    "signup": "Create Account",
+    "email": "Email",
+    "password": "Password",
+    "name": "Your name",
+    "forgot_password": "Forgot password?",
+    "no_account": "Don't have an account?",
+    "has_account": "Already have an account?",
+    "continue_google": "Continue with Google",
+    "or": "or",
+    "signup_subtitle": "Free 5 credits to start",
+    "login_subtitle": "Welcome back",
+    "logout": "Sign Out"
+  },
+  "home": {
+    "greeting": "Hi, {name}!",
+    "credits": "Credits",
+    "recent_topics": "Recent Topics",
+    "no_topics": "No topics yet",
+    "create_first": "Upload your first material to get started",
+    "upload_material": "Upload Material"
+  },
+  "common": {
+    "loading": "Loading...",
+    "error": "Something went wrong",
+    "retry": "Retry",
+    "cancel": "Cancel",
+    "save": "Save",
+    "delete": "Delete",
+    "edit": "Edit",
+    "done": "Done",
+    "next": "Next",
+    "back": "Back"
+  }
+}
