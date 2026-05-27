@@ -11,7 +11,7 @@ dependencies:
     sdk: flutter
   cupertino_icons: ^1.0.9
 
-  # State management
+  # State management (Riverpod 2.x — compatible with current Flutter)
   flutter_riverpod: ^2.6.1
   riverpod_annotation: ^2.6.1
 
