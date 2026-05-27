@@ -1,16 +1,21 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../shared/theme/app_theme.dart';
+import '../auth/presentation/auth_provider.dart';
 
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends ConsumerWidget {
   const HomeScreen({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final user = ref.watch(authStateProvider).valueOrNull;
+
     return Scaffold(
       appBar: AppBar(
-        title: Text('home.greeting'.tr(namedArgs: {'name': 'Parent'})),
+        title: Text('home.greeting'.tr(namedArgs: {'name': user?.name ?? 'User'})),
         actions: [
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
@@ -24,7 +29,7 @@ class HomeScreen extends StatelessWidget {
                 const Icon(Icons.stars, color: AppColors.primary, size: 18),
                 const SizedBox(width: 4),
                 Text(
-                  '5 ${'home.credits'.tr()}',
+                  '${user?.credits ?? 0} ${'home.credits'.tr()}',
                   style: const TextStyle(
                     color: AppColors.primary,
                     fontWeight: FontWeight.w600,
@@ -34,7 +39,20 @@ class HomeScreen extends StatelessWidget {
               ],
             ),
           ),
-          const SizedBox(width: 16),
+          const SizedBox(width: 8),
+          PopupMenuButton<String>(
+            icon: const Icon(Icons.more_vert),
+            onSelected: (value) {
+              if (value == 'logout') {
+                ref.read(authStateProvider.notifier).logout();
+                context.go('/login');
+              }
+            },
+            itemBuilder: (context) => [
+              PopupMenuItem(value: 'logout', child: Text('auth.logout'.tr())),
+            ],
+          ),
+          const SizedBox(width: 8),
         ],
       ),
       body: Center(
@@ -63,9 +81,7 @@ class HomeScreen extends StatelessWidget {
               ),
               const SizedBox(height: 32),
               ElevatedButton.icon(
-                onPressed: () {
-                  // TODO: Navigate to upload material
-                },
+                onPressed: () => context.push('/upload'),
                 icon: const Icon(Icons.add_photo_alternate),
                 label: Text('home.upload_material'.tr()),
               ),

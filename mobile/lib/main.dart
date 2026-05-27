@@ -24,6 +24,8 @@ class VandixApp extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final router = ref.watch(routerProvider);
+
     return MaterialApp.router(
       title: 'Vandix',
       debugShowCheckedModeBanner: false,

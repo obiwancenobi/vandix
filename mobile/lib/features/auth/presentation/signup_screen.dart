@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 
 import '../../../shared/theme/app_theme.dart';
 import '../../../shared/widgets/custom_text_field.dart';
+import 'auth_provider.dart';
 
 class SignupScreen extends ConsumerStatefulWidget {
   const SignupScreen({super.key});
@@ -18,7 +19,6 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
   final _nameController = TextEditingController();
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
-  bool _isLoading = false;
   bool _obscurePassword = true;
 
   @override
@@ -31,25 +31,35 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
 
   Future<void> _signup() async {
     if (!_formKey.currentState!.validate()) return;
-    setState(() => _isLoading = true);
-
-    try {
-      // TODO: Call auth provider
-      await Future.delayed(const Duration(seconds: 1)); // mock
-      if (mounted) context.go('/home');
-    } catch (e) {
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(e.toString()), backgroundColor: AppColors.error),
-        );
-      }
-    } finally {
-      if (mounted) setState(() => _isLoading = false);
-    }
+    await ref.read(authStateProvider.notifier).register(
+      name: _nameController.text.trim(),
+      email: _emailController.text.trim(),
+      password: _passwordController.text,
+    );
   }
 
   @override
   Widget build(BuildContext context) {
+    final authState = ref.watch(authStateProvider);
+
+    ref.listen(authStateProvider, (prev, next) {
+      next.whenOrNull(
+        data: (user) {
+          if (user != null) context.go('/home');
+        },
+        error: (error, _) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(error.toString().replaceFirst('Exception: ', '')),
+              backgroundColor: AppColors.error,
+            ),
+          );
+        },
+      );
+    });
+
+    final isLoading = authState is AsyncLoading;
+
     return Scaffold(
       body: SafeArea(
         child: SingleChildScrollView(
@@ -114,8 +124,8 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
                 ),
                 const SizedBox(height: 32),
                 ElevatedButton(
-                  onPressed: _isLoading ? null : _signup,
-                  child: _isLoading
+                  onPressed: isLoading ? null : _signup,
+                  child: isLoading
                       ? const SizedBox(
                           height: 20,
                           width: 20,
