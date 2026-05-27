@@ -3,7 +3,7 @@ from functools import lru_cache
 
 
 class Settings(BaseSettings):
-    app_name: str = "LearnLoop"
+    app_name: str = "Vandix"
     debug: bool = False
 
     database_url: str

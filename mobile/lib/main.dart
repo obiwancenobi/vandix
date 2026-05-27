@@ -14,18 +14,18 @@ void main() async {
       supportedLocales: const [Locale('en'), Locale('id')],
       path: 'assets/i18n',
       fallbackLocale: const Locale('en'),
-      child: const ProviderScope(child: LearnLoopApp()),
+      child: const ProviderScope(child: VandixApp()),
     ),
   );
 }
 
-class LearnLoopApp extends ConsumerWidget {
-  const LearnLoopApp({super.key});
+class VandixApp extends ConsumerWidget {
+  const VandixApp({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return MaterialApp.router(
-      title: 'LearnLoop',
+      title: 'Vandix',
       debugShowCheckedModeBanner: false,
       theme: AppTheme.light,
       routerConfig: router,
